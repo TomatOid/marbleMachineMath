@@ -26,7 +26,6 @@ def noSlip(lin_vel, ang_vel, position, delta, r_roll, mu_k, creepage):
     denominator = r ** 2 / (5 * r_roll ** 2) + 1 / 2
     a = ((1 / 5) * r ** 2 * ang_vel ** 2 + (1 / 2) * lin_vel ** 2 + g * mu_k * delta * creepage) / denominator
     b = g * delta * sin(pitchAngle(position, delta)) / denominator
-    print(b, a)
     return (b + sqrt(b ** 2 + 4 * a)) / 2
     
 def nextLinVel(lin_vel, ang_vel, position, delta):
@@ -34,24 +33,19 @@ def nextLinVel(lin_vel, ang_vel, position, delta):
     r_roll = rollingRadius(position)
     mu_k = frictionCoefficient(position, delta_t)
     creepage = lin_vel - r_roll * ang_vel
-    print(creepage)
     if creepage > 0 and ang_vel + (g * mu_k * delta) / r_roll < lin_vel / r_roll:
         a = lin_vel ** 2 - (4 / 5) * r ** 2 * ang_vel * (g * mu_k * delta / r_roll) - (2 / 5) * r ** 2 * (g * mu_k * delta / r_roll) ** 2 + 2 * g * mu_k * delta * creepage
         b = 2 * delta * g * sin(pitchAngle(position, delta))
         if (b ** 2 + 4 * a >= 0):
-            print("hi")
             return (b + sqrt(b ** 2 + 4 * a)) / 2
         else:
-            print("bye")
             return noSlip(lin_vel, ang_vel, position, delta, r_roll, mu_k, creepage)
     elif creepage < 0 and ang_vel - (g * mu_k * delta) / r_roll > lin_vel / r_roll:
         a = lin_vel ** 2 + (4 / 5) * r ** 2 * ang_vel * (g * mu_k * delta / r_roll) - (2 / 5) * r ** 2 * (g * mu_k * delta / r_roll) ** 2 + 2 * g * mu_k * delta * creepage
         b = 2 * delta * g * sin(pitchAngle(position, delta))
         if (b ** 2 + 4 * a >= 0):
-            print("hello")
             return (b + sqrt(b ** 2 + 4 * a)) / 2
         else:
-            print("goodbye")
             return noSlip(lin_vel, ang_vel, position, delta, r_roll, mu_k, creepage)
     else:
         return noSlip(lin_vel, ang_vel, position, delta, r_roll, mu_k, creepage)
@@ -90,7 +84,6 @@ for i in range(0, array_len):
     ang_vel = nextAngVel(lin_vel, ang_vel, position, delta_t)
     position += lin_vel * delta_t
 
-print(positions)
 plt.plot(ang_vels, label = "angular velocity")
 plt.plot(lin_vels, label = "linear velocity")
 plt.plot(lin_vels - ang_vels * roll_radius_ls, label = "creepage")
