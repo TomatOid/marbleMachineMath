@@ -1,0 +1,73 @@
+\documentclass{article}
+\setlength{\parskip}{1em}
+
+\usepackage{amsmath}
+\usepackage{mathtools}
+
+\begin{document}
+\title{Derivation and explanation of equations}
+\maketitle
+
+So the easiest approach to solving the marble velocity problem would be
+to start with conservation of energy. A naive starting equation would be something like:
+
+\begin{math}
+    \frac{1}{2} I \omega(t)^{2} + \frac{1}{2} m v(t)^{2} + m g \Delta h = \frac{1}{2} I \omega(t + \delta)^{2} + \frac{1}{2} m v(t + \delta)^{2}
+\end{math}
+
+Then, if we assume that the marble does not slip relative to the track, 
+we can directly relate $\omega$ and v, as the equation 
+$\omega(x) = \frac{v(x)}{r_{roll}}$. It is then fairly trivial to solve for $v(x + \delta)$.
+But the no-slip assumption does not always align with reality. To have a more accurate
+approximation, we must account the case when the marble slips relative to the track due
+to the finite coefficient of static friction. This means that the no-slip assumption holds
+until the magnitude of the angular acceleration reaches a certain threshold. 
+In equation form that is:
+
+\begin{math}
+    |\omega(t)'| \leq \frac{F_{N} \mu_{k}}{r_{roll}}
+\end{math}
+
+\begin{math}
+    \lim_{\delta \to 0} |\frac{\omega(t + \delta) - \omega(t)}{\delta}| < \frac{F_{N} \mu_{k}}{r_{roll}}
+\end{math}
+
+\begin{math}
+    \arraycolsep=1.4pt \def \arraystretch{2.2}
+    \begin{array}{l|l}
+        \omega'(x) \ge 0 & \omega'(x) < 0 \\
+        \hline
+        \omega(x + \delta) - \omega(x) \leq \frac{F_{N} \mu_{k} \delta}{r_{roll}} & \omega(x) - \omega(x + \delta) \leq \frac{F_{N} \mu_{k} \delta}{r_{roll}} \\ 
+        & \omega(x + \delta) - \omega(x) \ge -\frac{F_{N} \mu_{k} \delta}{r_{roll}} \\
+        \omega(x + \delta) \leq \omega(x) + \frac{F_{N} \mu_{k} \delta}{r_{roll}} & \omega(x + \delta) \ge \omega(x) - \frac{F_{N} \mu_{k} \delta}{r_{roll}} \\
+        \omega(x + \delta) = \min(\frac{v(x + \delta)}{r_{roll}}, \omega(x) + \frac{F_{N} \mu_{k} \delta}{r_{roll}}) &
+        \omega(x + \delta) = \max(\frac{v(x + \delta)}{r_{roll}}, \omega(x) - \frac{F_{N} \mu_{k} \delta}{r_{roll}})
+    \end{array}
+\end{math}
+
+As a consequence of this slippage, there is an additional source of useful energy loss
+that must be accounted for in order to use conservation of energy.
+
+\begin{align*}
+    \frac{1}{2} I \omega(t)^{2} + \frac{1}{2} m v(t)^{2} + m g \Delta h = 
+        \frac{1}{2} I \omega(t + \delta)^{2} + \frac{1}{2} m v(t + \delta)^{2} + \int_{t}^{t + \delta} F_{N} | v(x) - r_{roll} \omega(x) | dx 
+\end{align*}
+
+In the $\delta \to 0$ limit, this becomes:
+
+\begin{align*}
+    \frac{1}{2} I \omega(t)^{2} + \frac{1}{2} m v(t)^{2} + m g \Delta h = 
+        \frac{1}{2} I \omega(t + \delta)^{2} + \frac{1}{2} m v(t + \delta)^{2} + \delta F_{N} | v(t) - r_{roll} \omega(t) | 
+\end{align*}
+
+Using $\Delta h$ will be problematic since it depends on displacement, while everything else is a function of t.
+So I will subsitiute it for $\delta sin(\theta) v(t + \delta)$, where $\theta$ is the inclination angle.
+This will approach $\Delta h$ as $\delta \to 0$. The reason that the future velocity is used is so that the
+marble will not get stuck when velocity is zero.
+
+\begin{align*}
+    \frac{1}{2} I \omega(t)^{2} + \frac{1}{2} m v(t)^{2} + m g \delta sin(\theta) v(t + \delta) = 
+        \frac{1}{2} I \omega(t + \delta)^{2} + \frac{1}{2} m v(t + \delta)^{2} + \delta F_{N} | v(t) - r_{roll} \omega(t) | 
+\end{align*}
+
+\end{document}
